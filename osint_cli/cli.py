@@ -1,5 +1,7 @@
 import click
 
+from osint_cli.modules.domain_recon import get_dns_records
+
 
 @click.group()
 def cli():
@@ -9,11 +11,10 @@ def cli():
 @cli.command()
 @click.argument("target")
 def domain(target):
-    """Perform domain reconnaissance on the specified TARGET."""
-    click.echo(f"Performing domain reconnaissance on: {target}")
-    # Here you would add the logic to perform domain reconnaissance
-    # For example, you could call a function that handles the reconnaissance
-    # perform_domain_reconnaissance(target)
+    results = get_dns_records(target)
+    click.echo(f"DNS records for {target}:")
+    for rtype, records in results.items():
+        click.echo(f"{rtype} records: {', '.join(records) if records else 'None'}")
 
 
 if __name__ == "__main__":
